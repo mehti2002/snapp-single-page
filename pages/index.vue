@@ -2,9 +2,13 @@
   <section class="main">
     <div class="content">
       <div class="rotate_section" :style="rotateMain"></div>
+
       <span class="title_content">404</span>
+
       <span class="title_content-change" :style="rotateStyleChange">404</span>
+
       <span class="main_text">صفحه مورد نظر یافت نشد</span>
+
       <div class="btn_content">
         <span class="text_btn">بازگشت به صفحه اصلی</span>
       </div>
@@ -16,40 +20,35 @@
 import { ref, onMounted } from "vue";
 
 const rotateMain = ref({
-  top: "50%",
-  left: "50%",
   transform: "translate(-50%, -50%)",
 });
 
 const rotateStyleChange = ref({
-  top: "50%",
-  left: "50%",
   transform: "translate(-50%, -50%)",
 });
 
 onMounted(() => {
-  setInterval(() => {
-    const offsetTop = 45 + Math.sin(Date.now() / 750) * 5;
-    const offsetLeft = 50 + Math.cos(Date.now() / 750) * 6;
-    const translateX = -offsetLeft;
-    const translateY = -offsetTop;
-
-    const offsetTopChange = 30 + Math.sin(Date.now() / 750) * 5;
-    const offsetLeftChange = 45 + Math.cos(Date.now() / 750) * 5;
-    const translateXChange = -offsetLeftChange;
-    const translateYChange = -offsetTopChange;
-
+  const animate = () => {
+    const offsetX = Math.cos(Date.now() / 800) * 5;
+    const offsetY = Math.sin(Date.now() / 1000) * 5;
     rotateMain.value = {
-      top: offsetTop + "%",
-      left: offsetLeft + "%",
-      transform: `translate(${translateX}%, ${translateY}%)`,
+      top: "50%",
+      left: "50%",
+      transform: `translate(calc(-50% + ${offsetX}%), calc(-50% + ${offsetY}%))`,
     };
+
+    const textOffsetX = Math.cos(Date.now() / 600) * 3;
+    const textOffsetY = Math.sin(Date.now() / 700) * 3;
     rotateStyleChange.value = {
-      top: offsetTopChange + "%",
-      left: offsetLeftChange + "%",
-      transform: `translate(${translateXChange}%, ${translateYChange}%)`,
+      top: "50%",
+      left: "50%",
+      transform: `translate(calc(-50% + ${textOffsetX}%), calc(-50% + ${textOffsetY}%))`,
     };
-  }, 16);
+
+    requestAnimationFrame(animate);
+  };
+
+  animate();
 });
 </script>
 
@@ -78,7 +77,7 @@ body {
 .btn_content {
   background: #22ce83;
   color: white;
-  z-index: 111111111;
+  z-index: 10;
   font-size: 1.2rem;
   cursor: pointer;
   display: flex;
@@ -101,16 +100,25 @@ body {
   margin-top: 1rem;
   margin-bottom: 1rem;
   font-weight: 400;
-  z-index: 111111111;
+  z-index: 10;
   color: white;
+}
+
+@media (max-width: 1024px) {
+  .main_text {
+    font-size: 2rem;
+  }
 }
 
 .rotate_section {
   position: absolute;
-  background: radial-gradient(40% 40% at 50% 42%, white, #000 35%) !important;
-  z-index: 11;
+  top: 50%;
+  left: 50%;
+  background: radial-gradient(40% 40% at 50% 42%, white, #000 35%);
   height: 250vmax;
   width: 250vmax;
+  transform: translate(-50%, -50%);
+  z-index: 1;
   box-shadow: rgba(245, 243, 243, 0.56) 0px 22px 70px 4px;
 }
 
@@ -119,15 +127,32 @@ body {
   font-size: 18rem;
   line-height: 18rem;
   color: #737373;
-  z-index: 1111111;
+  z-index: 5;
+  position: relative;
 }
+
+@media (max-width: 1024px) {
+  .title_content {
+    font-size: 12rem;
+  }
+}
+
 .title_content-change {
   text-align: center;
   position: absolute;
+  top: 50%;
+  left: 50%;
   font-size: 18rem;
   line-height: 18rem;
   color: black;
   filter: blur(1.5vmin);
-  z-index: 111111;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+}
+
+@media (max-width: 1024px) {
+  .title_content-change {
+    font-size: 12rem;
+  }
 }
 </style>
